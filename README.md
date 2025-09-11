@@ -1,4 +1,30 @@
 # deepspeech.pytorch
+
+## Sep 11 2025 Update
+
+I successfully reproduce the code at local, here are some environmental informations may helpful.
+![deepspeech](./images/deepspeech.png)
+
+Basic:
+1. Python 3.8.10
+2. NVIDIA RTX 2080Ti 11GB, NVIDIA-SMI 550.90.07, Driver Version: 550.90.07, CUDA Version: 12.4
+3. Ubuntu 20.04.5 LTS
+
+Some important installation:  
+1. `apt-get install sox`
+2. `apt-get update && apt-get install -y libsox-dev sox libsndfile1 ffmpeg`
+3. `gTTS` is used to gererated the `wav` format audio
+4. [`requirements.txt`](./requirements.txt)
+
+Inference command:
+```
+python transcribe.py model.model_path=./ted_pretrained_v3.ckpt model.cuda=True chunk_size_seconds=-1 audio_path=./jack.wav
+```
+
+Original README is at below.
+
+---
+
 ![Tests](https://github.com/SeanNaren/deepspeech.pytorch/actions/workflows/ci-test.yml/badge.svg)
 
 Implementation of DeepSpeech2 for PyTorch using [PyTorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning). The repo supports training/testing and inference using the [DeepSpeech2](http://arxiv.org/pdf/1512.02595v1.pdf) model. Optionally a [kenlm](https://github.com/kpu/kenlm) language model can be used at inference time.
