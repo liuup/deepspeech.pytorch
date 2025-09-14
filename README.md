@@ -39,7 +39,7 @@ python transcribe.py model.model_path=./ted_pretrained_v3.ckpt model.cuda=True c
 4. All the outputs and logs could be seen at [`./outputs/`](./outputs/)
 ![attack_log](./images/attack_log.png)
 
-## 3. Comprison between audios
+## 3. Comparison between audios
 1. Original audio: [`./audios/jack.wav`](./audios/jack.wav)
 
 2. Target adversarial attack audio: [`./outputs/adv.wav`](./outputs/adv.wav)
