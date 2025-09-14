@@ -59,7 +59,7 @@ def transcribe(cfg: TranscribeConfig):
         normalize=True
     )
 
-    decoded_output, decoded_offsets = run_transcribe(
+    decoded_output, decoded_offsets, _ = run_transcribe(
         audio_path=hydra.utils.to_absolute_path(cfg.audio_path),
         spect_parser=spect_parser,
         model=model,
@@ -95,5 +95,48 @@ def run_transcribe(audio_path: str,
                 out, output_sizes, hs = model(spect, input_sizes, hs)
             all_outs.append(out.cpu())
     all_outs = torch.cat(all_outs, axis=1) # combine outputs of chunks in one tensor
+    
+
+
+    '''
+    import copy
+
+    ori_input = copy.deepcopy(all_outs)
+    ori_input = ori_input.transpose(0, 1)
+
+    print(ori_input)
+
+    print(f"ori_input.shape {ori_input.shape}")
+
+    target_text = "idiot my name is jack"
+
+    # 把target——text 转成对应的字符索引
+    target = []
+    for c in target_text:
+        # c转大写
+        # print(str.upper(c))
+        target.append(model.labels.index(str.upper(c)))
+    # print(f"target {target}")
+    target_output = torch.tensor([target])
+
+    # blank的标记索引是0
+    ctcloss = torch.nn.CTCLoss(blank=0, reduction='mean', zero_infinity=True)
+
+
+    print(ori_input.shape)
+    print(target_output.shape)
+    print(torch.tensor([ori_input.size(0)]))
+    print(torch.tensor([len(target)]))
+
+    loss = ctcloss(ori_input, target_output, torch.tensor([ori_input.size(0)]), torch.tensor([len(target)]))
+    print(f"loss {loss}")
+    '''
+    
+
+
+
+    # decoded_output就是解码出来的文本, decoded_offsets还没看懂是什么
     decoded_output, decoded_offsets = decoder.decode(all_outs)
-    return decoded_output, decoded_offsets
+
+    # all_outs shape是[batch_size, length, num_classes], 存的是每个位置上, 每个字符对应的概率
+    return decoded_output, decoded_offsets, all_outs

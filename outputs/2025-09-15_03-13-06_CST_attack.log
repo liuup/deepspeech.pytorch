@@ -1,0 +1,24 @@
+2025-09-15 03:13:06,879 CST - INFO - Timezone: CST
+2025-09-15 03:13:06,880 CST - INFO - source dB: 85.21955490112305
+2025-09-15 03:13:06,880 CST - INFO - Target text: IDIOT MY NAME IS JACK
+2025-09-15 03:13:06,880 CST - INFO - {'target': 'idiot my name is jack', 'audio': './audios/jack.wav', 'model_path': './weights/librispeech_pretrained_v3.ckpt', 'lr': 0.05, 'steps': 10000, 'l2penalty': 0, 'output_path': './outputs/'}
+2025-09-15 03:13:09,256 CST - INFO - Transcribed result from audio: ['HELLOW MY NAME IS JACK']
+2025-09-15 03:13:09,257 CST - INFO - 
+----- ----- attack start ----- -----
+2025-09-15 03:13:09,543 CST - INFO - step 00000/10000, lr 0.05, loss 2.7263 [ctc 2.7263], grad_norm 0.0010, text ['HELLOW MY NAME IS JACK']
+2025-09-15 03:13:18,854 CST - INFO - step 00100/10000, lr 0.05, loss 2.3844 [ctc 2.3844], grad_norm 0.0005, text ['HILLOW MY NAME IS JACK']
+2025-09-15 03:13:28,187 CST - INFO - step 00200/10000, lr 0.05, loss 2.1452 [ctc 2.1452], grad_norm 0.0005, text ['HILLO MY NAME IS JACK']
+2025-09-15 03:13:37,675 CST - INFO - step 00300/10000, lr 0.05, loss 1.8715 [ctc 1.8715], grad_norm 0.0005, text ['HILLO MY NAME IS JACK']
+2025-09-15 03:13:47,024 CST - INFO - step 00400/10000, lr 0.05, loss 1.5461 [ctc 1.5461], grad_norm 0.0004, text ['HILLO MY NAME IS JACK']
+2025-09-15 03:13:56,424 CST - INFO - step 00500/10000, lr 0.05, loss 1.3297 [ctc 1.3297], grad_norm 0.0004, text ['HILLO MY NAME IS JACK']
+2025-09-15 03:14:05,877 CST - INFO - step 00600/10000, lr 0.05, loss 1.1210 [ctc 1.1210], grad_norm 0.0004, text ['HILLOW MY NAME IS JACK']
+2025-09-15 03:14:15,220 CST - INFO - step 00700/10000, lr 0.05, loss 0.9565 [ctc 0.9565], grad_norm 0.0003, text ['HILOT MY NAME IS JACK']
+2025-09-15 03:14:24,533 CST - INFO - step 00800/10000, lr 0.05, loss 0.7656 [ctc 0.7656], grad_norm 0.0004, text ['HILOT MY NAME IS JACK']
+2025-09-15 03:14:33,877 CST - INFO - step 00900/10000, lr 0.05, loss 0.5738 [ctc 0.5738], grad_norm 0.0003, text ['HILOT MY NAME IS JACK']
+2025-09-15 03:14:43,206 CST - INFO - step 01000/10000, lr 0.05, loss 0.4473 [ctc 0.4473], grad_norm 0.0003, text [' HILOT MY NAME IS JACK']
+2025-09-15 03:14:52,539 CST - INFO - step 01100/10000, lr 0.05, loss 0.3494 [ctc 0.3494], grad_norm 0.0002, text ['HILOT MY NAME IS JACK']
+2025-09-15 03:15:01,958 CST - INFO - step 01200/10000, lr 0.05, loss 0.2589 [ctc 0.2589], grad_norm 0.0002, text ['IHILOT MY NAME IS JACK']
+2025-09-15 03:15:11,232 CST - INFO - step 01300/10000, lr 0.05, loss 0.1979 [ctc 0.1979], grad_norm 0.0002, text ['IHIOT MY NAME IS JACK']
+2025-09-15 03:15:20,491 CST - INFO - step 01400/10000, lr 0.05, loss 0.1576 [ctc 0.1576], grad_norm 0.0001, text ['IDIOT MY NAME IS JACK']
+2025-09-15 03:15:20,610 CST - INFO - ----- ----- Attack success! ----- -----
+2025-09-15 03:15:20,611 CST - INFO - Adversarial example saved to ./outputs/adv.wav

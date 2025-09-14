@@ -71,6 +71,11 @@ class MaskConv(nn.Module):
 
 class InferenceBatchSoftmax(nn.Module):
     def forward(self, input_):
+
+        # Very important motification!!!
+        # log_softmax is ued to compute the ctc loss, and meet the requirement of nn.CTCLoss input
+        return F.log_softmax(input_, dim=-1)
+
         if not self.training:
             return F.softmax(input_, dim=-1)
         else:

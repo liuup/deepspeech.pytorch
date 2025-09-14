@@ -1,6 +1,6 @@
 # deepspeech.pytorch
 
-## Sep 11 2025 Update
+## 1. Hardware and dependency requirements
 
 I successfully reproduce the code at local, here are some environmental informations may helpful.
 ![deepspeech](./images/deepspeech.png)
@@ -10,16 +10,52 @@ Basic:
 2. NVIDIA RTX 2080Ti 11GB, NVIDIA-SMI 550.90.07, Driver Version: 550.90.07, CUDA Version: 12.4
 3. Ubuntu 20.04.5 LTS
 
-Some important installation:  
+Some important requirements:  
 1. `apt-get install sox`
 2. `apt-get update && apt-get install -y libsox-dev sox libsndfile1 ffmpeg`
-3. `gTTS` is used to gererated the `wav` format audio
-4. [`requirements.txt`](./requirements.txt)
+3. [`requirements.txt`](./requirements.txt)
 
-Inference command:
+
+Original inference test command:
 ```
 python transcribe.py model.model_path=./ted_pretrained_v3.ckpt model.cuda=True chunk_size_seconds=-1 audio_path=./jack.wav
 ```
+
+
+## 2. Audio adversarial attack
+1. Follow the [`./weights/README.md`](./weights/README.md) to download the pretrained model weights
+2. Follow the [`./audios/README.md`](./audios/README.md) to convert a text to `.wav` file
+3. Run the `attack.py`
+    ```
+    python attack.py -target "idiot my name is jack" \
+                      -audio ./audios/jack.wav \
+                      -model_path ./weights/librispeech_pretrained_v3.ckpt \
+                      -lr 0.05 \
+                      -steps 10000 \
+                      -l2penalty 0 \
+                      -output_path ./outputs/
+    ```
+
+4. All the outputs and logs could be seen at [`./outputs/`](./outputs/)
+![attack_log](./images/attack_log.png)
+
+## 3. Comprison between audios
+Original audio:
+
+<audio controls>
+  <source src="./audios/jack.wav" type="audio/wav">
+  Your browser does not support the audio element.
+</audio>
+
+Adversarial audio:
+
+<audio controls>
+  <source src="./outputs/adv.wav" type="audio/wav">
+  Your browser does not support the audio element.
+</audio>
+
+
+--- 
 
 Original README is at below.
 
