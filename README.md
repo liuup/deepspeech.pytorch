@@ -40,19 +40,9 @@ python transcribe.py model.model_path=./ted_pretrained_v3.ckpt model.cuda=True c
 ![attack_log](./images/attack_log.png)
 
 ## 3. Comprison between audios
-Original audio:
+1. Original audio: [`./audios/jack.wav`](./audios/jack.wav)
 
-<audio controls>
-  <source src="./audios/jack.wav" type="audio/wav">
-  Your browser does not support the audio element.
-</audio>
-
-Adversarial audio:
-
-<audio controls>
-  <source src="./outputs/adv.wav" type="audio/wav">
-  Your browser does not support the audio element.
-</audio>
+2. Target adversarial attack audio: [`./outputs/adv.wav`](./outputs/adv.wav)
 
 
 --- 
