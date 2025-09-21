@@ -1,0 +1,223 @@
+2025-09-21 11:42:50,608 CST - INFO - Timezone: CST
+2025-09-21 11:42:50,609 CST - INFO - {'audio': './audios/jack.wav', 'words_method': 1, 'words_path': './toxic_words.csv', 'llm_api': '', 'llm_url': 'https://api.deepseek.com', 'llm_name': 'deepseek-chat', 'llm_temp': 1.3, 'model_path': './weights/librispeech_pretrained_v3.ckpt', 'lr': 0.05, 'steps': 10000, 'l2penalty': 0, 'output_path': './outputs/'}
+2025-09-21 11:42:52,776 CST - INFO - Transcribed result from audio: 'HELLOW MY NAME IS JACK'
+2025-09-21 11:42:54,543 CST - INFO - word tokenized: ['HELLOW', 'MY', 'NAME', 'IS', 'JACK']
+2025-09-21 11:42:54,579 CST - INFO - LLM prompt: 
+        ## Question
+        For the sentence "HELLOW MY NAME IS JACK" replace the 1st word "HELLOW" with another word that is toxic, offensive, and unacceptable.
+
+        ## Rules
+        1. The replacement word must be pronounced similarly to the original word.
+        2. You must provide 5 replacement words, and no duplicates are allowed.
+        3. The replaced words can only contain letters, no numbers or other symbols.
+        4. Return each word directly without providing additional explanation. Enclose the word in <word></word> tags.
+
+        ## Your Answers at below
+        <word></word>
+        
+2025-09-21 11:42:55,100 CST - INFO - HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
+2025-09-21 11:42:59,746 CST - INFO - LLM response: 
+<word>hellhole</word>
+<word>hellspawn</word>
+<word>hellbent</word>
+<word>hellish</word>
+<word>hellfire</word>
+2025-09-21 11:42:59,746 CST - INFO - ['hellhole', 'hellspawn', 'hellbent', 'hellish', 'hellfire']
+2025-09-21 11:42:59,746 CST - INFO - Number of toxic words: 5
+2025-09-21 11:42:59,746 CST - INFO - ----- ----- Attack start ----- -----
+2025-09-21 11:42:59,747 CST - INFO - Target text: HELLHOLE MY NAME IS JACK
+2025-09-21 11:42:59,971 CST - INFO - step 00000/10000, lr 0.05, loss 1.1405 [ctc 1.1405], delta_l2 0.0, grad_norm 0.0009, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:43:09,329 CST - INFO - step 00100/10000, lr 0.05, loss 0.9224 [ctc 0.9224], delta_l2 680.5587158203125, grad_norm 0.0004, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:43:18,685 CST - INFO - step 00200/10000, lr 0.05, loss 0.7695 [ctc 0.7695], delta_l2 1214.2191162109375, grad_norm 0.0003, text ['HELLOWE MY NAME IS JACK']
+2025-09-21 11:43:28,061 CST - INFO - step 00300/10000, lr 0.05, loss 0.6780 [ctc 0.6780], delta_l2 1645.2359619140625, grad_norm 0.0003, text ['HELLOWE MY NAME IS JACK']
+2025-09-21 11:43:37,400 CST - INFO - step 00400/10000, lr 0.05, loss 0.5747 [ctc 0.5747], delta_l2 2066.788330078125, grad_norm 0.0002, text ['HELLOWE MY NAME IS JACK']
+2025-09-21 11:43:46,756 CST - INFO - step 00500/10000, lr 0.05, loss 0.4783 [ctc 0.4783], delta_l2 2474.15087890625, grad_norm 0.0002, text ['HELLOWE MY NAME IS JACK']
+2025-09-21 11:43:56,130 CST - INFO - step 00600/10000, lr 0.05, loss 0.3707 [ctc 0.3707], delta_l2 2854.895751953125, grad_norm 0.0003, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:44:05,503 CST - INFO - step 00700/10000, lr 0.05, loss 0.2978 [ctc 0.2978], delta_l2 3141.575927734375, grad_norm 0.0001, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:44:14,894 CST - INFO - step 00800/10000, lr 0.05, loss 0.2544 [ctc 0.2544], delta_l2 3400.5673828125, grad_norm 0.0001, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:44:24,277 CST - INFO - step 00900/10000, lr 0.05, loss 0.2191 [ctc 0.2191], delta_l2 3660.56982421875, grad_norm 0.0001, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:44:33,612 CST - INFO - step 01000/10000, lr 0.05, loss 0.1872 [ctc 0.1872], delta_l2 3928.5810546875, grad_norm 0.0001, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:44:42,949 CST - INFO - step 01100/10000, lr 0.05, loss 0.1578 [ctc 0.1578], delta_l2 4203.8583984375, grad_norm 0.0001, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:44:52,333 CST - INFO - step 01200/10000, lr 0.05, loss 0.1296 [ctc 0.1296], delta_l2 4482.43408203125, grad_norm 0.0001, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:45:01,688 CST - INFO - step 01300/10000, lr 0.05, loss 0.1066 [ctc 0.1066], delta_l2 4740.10791015625, grad_norm 0.0001, text ['HELLOLE MY NAME IS JACK']
+2025-09-21 11:45:11,033 CST - INFO - step 01400/10000, lr 0.05, loss 0.0887 [ctc 0.0887], delta_l2 4975.0400390625, grad_norm 0.0001, text ['HELLHOLE MY NAME IS JACK']
+2025-09-21 11:45:11,150 CST - INFO - Adversarial example saved to ./outputs/adv.wav and ./outputs/delta.wav
+2025-09-21 11:45:11,166 CST - INFO - Toxicity evaluation - Original: HELLOW MY NAME IS JACK, {'toxicity': 0.0062961583, 'severe_toxicity': 0.0001332316, 'obscene': 0.0011160573, 'threat': 0.00013246837, 'insult': 0.00031782617, 'identity_attack': 0.00013753092}
+2025-09-21 11:45:11,167 CST - INFO - Toxicity evaluation - Adversarial: HELLHOLE MY NAME IS JACK, {'toxicity': 0.6379034, 'severe_toxicity': 0.0038966304, 'obscene': 0.47755855, 'threat': 0.0008684997, 'insult': 0.033388015, 'identity_attack': 0.0010699558}
+2025-09-21 11:45:11,167 CST - INFO - ----- ----- Attack success ----- -----
+2025-09-21 11:45:11,167 CST - INFO - ----- ----- Attack start ----- -----
+2025-09-21 11:45:11,167 CST - INFO - Target text: HELLSPAWN MY NAME IS JACK
+2025-09-21 11:45:11,305 CST - INFO - step 00000/10000, lr 0.05, loss 1.9289 [ctc 1.9289], delta_l2 0.0, grad_norm 0.0007, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:45:20,664 CST - INFO - step 00100/10000, lr 0.05, loss 1.6510 [ctc 1.6510], delta_l2 668.16357421875, grad_norm 0.0005, text ['HELLO MY NAME IS JACK']
+2025-09-21 11:45:30,003 CST - INFO - step 00200/10000, lr 0.05, loss 1.4640 [ctc 1.4640], delta_l2 1275.972412109375, grad_norm 0.0004, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:45:39,347 CST - INFO - step 00300/10000, lr 0.05, loss 1.3076 [ctc 1.3076], delta_l2 1842.466064453125, grad_norm 0.0004, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:45:48,691 CST - INFO - step 00400/10000, lr 0.05, loss 1.1417 [ctc 1.1417], delta_l2 2319.70849609375, grad_norm 0.0003, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:45:58,050 CST - INFO - step 00500/10000, lr 0.05, loss 1.0161 [ctc 1.0161], delta_l2 2748.397216796875, grad_norm 0.0004, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:46:07,371 CST - INFO - step 00600/10000, lr 0.05, loss 0.8846 [ctc 0.8846], delta_l2 3166.064208984375, grad_norm 0.0003, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:46:16,696 CST - INFO - step 00700/10000, lr 0.05, loss 0.7828 [ctc 0.7828], delta_l2 3558.04296875, grad_norm 0.0002, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:46:26,056 CST - INFO - step 00800/10000, lr 0.05, loss 0.6962 [ctc 0.6962], delta_l2 3928.097900390625, grad_norm 0.0002, text ['HELLOAW MY NAME IS JACK']
+2025-09-21 11:46:35,436 CST - INFO - step 00900/10000, lr 0.05, loss 0.6207 [ctc 0.6207], delta_l2 4273.5908203125, grad_norm 0.0002, text ['HELLOAW MY NAME IS JACK']
+2025-09-21 11:46:44,796 CST - INFO - step 01000/10000, lr 0.05, loss 0.5591 [ctc 0.5591], delta_l2 4593.87646484375, grad_norm 0.0002, text ['HELLOAW MY NAME IS JACK']
+2025-09-21 11:46:54,170 CST - INFO - step 01100/10000, lr 0.05, loss 0.5088 [ctc 0.5088], delta_l2 4888.01318359375, grad_norm 0.0002, text ['HELLOAW MY NAME IS JACK']
+2025-09-21 11:47:03,540 CST - INFO - step 01200/10000, lr 0.05, loss 0.4679 [ctc 0.4679], delta_l2 5157.3583984375, grad_norm 0.0002, text ['HELLOAW MY NAME IS JACK']
+2025-09-21 11:47:12,915 CST - INFO - step 01300/10000, lr 0.05, loss 0.4337 [ctc 0.4337], delta_l2 5407.18798828125, grad_norm 0.0001, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:47:22,294 CST - INFO - step 01400/10000, lr 0.05, loss 0.4050 [ctc 0.4050], delta_l2 5640.419921875, grad_norm 0.0001, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:47:31,668 CST - INFO - step 01500/10000, lr 0.05, loss 0.3802 [ctc 0.3802], delta_l2 5861.5771484375, grad_norm 0.0005, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:47:41,057 CST - INFO - step 01600/10000, lr 0.05, loss 0.3580 [ctc 0.3580], delta_l2 6072.0791015625, grad_norm 0.0002, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:47:50,410 CST - INFO - step 01700/10000, lr 0.05, loss 0.3379 [ctc 0.3379], delta_l2 6273.38427734375, grad_norm 0.0002, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:47:59,789 CST - INFO - step 01800/10000, lr 0.05, loss 0.3193 [ctc 0.3193], delta_l2 6467.546875, grad_norm 0.0001, text ['HELLOWN MY NAME IS JACK']
+2025-09-21 11:48:09,171 CST - INFO - step 01900/10000, lr 0.05, loss 0.3020 [ctc 0.3020], delta_l2 6657.05322265625, grad_norm 0.0001, text ['HELLOWN MY NAME IS JACK']
+2025-09-21 11:48:18,544 CST - INFO - step 02000/10000, lr 0.05, loss 0.2858 [ctc 0.2858], delta_l2 6842.29736328125, grad_norm 0.0003, text ['HELLOWN MY NAME IS JACK']
+2025-09-21 11:48:27,909 CST - INFO - step 02100/10000, lr 0.05, loss 0.2702 [ctc 0.2702], delta_l2 7023.83740234375, grad_norm 0.0002, text ['HELLOAWN MY NAME IS JACK']
+2025-09-21 11:48:37,281 CST - INFO - step 02200/10000, lr 0.05, loss 0.2557 [ctc 0.2557], delta_l2 7199.796875, grad_norm 0.0004, text ['HELLOAWN MY NAME IS JACK']
+2025-09-21 11:48:46,635 CST - INFO - step 02300/10000, lr 0.05, loss 0.2427 [ctc 0.2427], delta_l2 7367.3623046875, grad_norm 0.0001, text ['HELLOAWN MY NAME IS JACK']
+2025-09-21 11:48:56,014 CST - INFO - step 02400/10000, lr 0.05, loss 0.2308 [ctc 0.2308], delta_l2 7529.3828125, grad_norm 0.0006, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:49:05,374 CST - INFO - step 02500/10000, lr 0.05, loss 0.2194 [ctc 0.2194], delta_l2 7688.2802734375, grad_norm 0.0004, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:49:14,743 CST - INFO - step 02600/10000, lr 0.05, loss 0.2081 [ctc 0.2081], delta_l2 7846.22265625, grad_norm 0.0001, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:49:24,117 CST - INFO - step 02700/10000, lr 0.05, loss 0.1972 [ctc 0.1972], delta_l2 8002.7099609375, grad_norm 0.0002, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:49:33,513 CST - INFO - step 02800/10000, lr 0.05, loss 0.1867 [ctc 0.1867], delta_l2 8156.51171875, grad_norm 0.0003, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:49:42,904 CST - INFO - step 02900/10000, lr 0.05, loss 0.1768 [ctc 0.1768], delta_l2 8307.623046875, grad_norm 0.0002, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:49:52,285 CST - INFO - step 03000/10000, lr 0.05, loss 0.1675 [ctc 0.1675], delta_l2 8456.74609375, grad_norm 0.0001, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:50:01,681 CST - INFO - step 03100/10000, lr 0.05, loss 0.1586 [ctc 0.1586], delta_l2 8604.1103515625, grad_norm 0.0000, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:50:11,059 CST - INFO - step 03200/10000, lr 0.05, loss 0.1500 [ctc 0.1500], delta_l2 8750.0419921875, grad_norm 0.0001, text ['HELLOPAWN MY NAME IS JACK']
+2025-09-21 11:50:20,497 CST - INFO - step 03300/10000, lr 0.05, loss 0.1418 [ctc 0.1418], delta_l2 8893.640625, grad_norm 0.0002, text ['HELLSPAWN MY NAME IS JACK']
+2025-09-21 11:50:20,630 CST - INFO - Adversarial example saved to ./outputs/adv.wav and ./outputs/delta.wav
+2025-09-21 11:50:20,645 CST - INFO - Toxicity evaluation - Original: HELLOW MY NAME IS JACK, {'toxicity': 0.0062961583, 'severe_toxicity': 0.0001332316, 'obscene': 0.0011160573, 'threat': 0.00013246837, 'insult': 0.00031782617, 'identity_attack': 0.00013753092}
+2025-09-21 11:50:20,645 CST - INFO - Toxicity evaluation - Adversarial: HELLSPAWN MY NAME IS JACK, {'toxicity': 0.08073104, 'severe_toxicity': 0.0003593495, 'obscene': 0.012022923, 'threat': 0.00055866974, 'insult': 0.0019565094, 'identity_attack': 0.00039888997}
+2025-09-21 11:50:20,646 CST - INFO - ----- ----- Attack success ----- -----
+2025-09-21 11:50:20,646 CST - INFO - ----- ----- Attack start ----- -----
+2025-09-21 11:50:20,646 CST - INFO - Target text: HELLBENT MY NAME IS JACK
+2025-09-21 11:50:20,780 CST - INFO - step 00000/10000, lr 0.05, loss 1.8706 [ctc 1.8706], delta_l2 0.0, grad_norm 0.0009, text ['HELLOW MY NAME IS JACK']
+2025-09-21 11:50:30,146 CST - INFO - step 00100/10000, lr 0.05, loss 1.6014 [ctc 1.6014], delta_l2 683.4937744140625, grad_norm 0.0004, text ['HELLO MY NAME IS JACK']
+2025-09-21 11:50:39,524 CST - INFO - step 00200/10000, lr 0.05, loss 1.3523 [ctc 1.3523], delta_l2 1327.4256591796875, grad_norm 0.0005, text ['HELLO MY NAME IS JACK']
+2025-09-21 11:50:48,927 CST - INFO - step 00300/10000, lr 0.05, loss 1.1821 [ctc 1.1821], delta_l2 1881.4451904296875, grad_norm 0.0003, text ['HELLO MY NAME IS JACK']
+2025-09-21 11:50:58,370 CST - INFO - step 00400/10000, lr 0.05, loss 1.0692 [ctc 1.0692], delta_l2 2352.194091796875, grad_norm 0.0003, text ['HELLO MY NAME IS JACK']
+2025-09-21 11:51:07,719 CST - INFO - step 00500/10000, lr 0.05, loss 0.9725 [ctc 0.9725], delta_l2 2789.74560546875, grad_norm 0.0002, text ['HELLO MY NAME IS JACK']
+2025-09-21 11:51:17,090 CST - INFO - step 00600/10000, lr 0.05, loss 0.8922 [ctc 0.8922], delta_l2 3192.636962890625, grad_norm 0.0008, text ['HELLOA MY NAME IS JACK']
+2025-09-21 11:51:26,543 CST - INFO - step 00700/10000, lr 0.05, loss 0.8156 [ctc 0.8156], delta_l2 3551.0986328125, grad_norm 0.0015, text ['HELLOA MY NAME IS JACK']
+2025-09-21 11:51:36,235 CST - INFO - step 00800/10000, lr 0.05, loss 0.7558 [ctc 0.7558], delta_l2 3830.391357421875, grad_norm 0.0002, text ['HELLOA MY NAME IS JACK']
+2025-09-21 11:51:45,650 CST - INFO - step 00900/10000, lr 0.05, loss 0.7119 [ctc 0.7119], delta_l2 4060.610107421875, grad_norm 0.0013, text ['HELLOA MY NAME IS JACK']
+2025-09-21 11:51:55,039 CST - INFO - step 01000/10000, lr 0.05, loss 0.6773 [ctc 0.6773], delta_l2 4265.1103515625, grad_norm 0.0002, text ['HELLOA MY NAME IS JACK']
+2025-09-21 11:52:04,414 CST - INFO - step 01100/10000, lr 0.05, loss 0.6479 [ctc 0.6479], delta_l2 4454.98291015625, grad_norm 0.0010, text ['HELLOA MY NAME IS JACK']
+2025-09-21 11:52:13,800 CST - INFO - step 01200/10000, lr 0.05, loss 0.6222 [ctc 0.6222], delta_l2 4634.42724609375, grad_norm 0.0001, text ['HELLOAT MY NAME IS JACK']
+2025-09-21 11:52:23,172 CST - INFO - step 01300/10000, lr 0.05, loss 0.5997 [ctc 0.5997], delta_l2 4805.32275390625, grad_norm 0.0011, text ['HELLOAT MY NAME IS JACK']
+2025-09-21 11:52:32,563 CST - INFO - step 01400/10000, lr 0.05, loss 0.5791 [ctc 0.5791], delta_l2 4969.31396484375, grad_norm 0.0012, text ['HELLOAT MY NAME IS JACK']
+2025-09-21 11:52:41,938 CST - INFO - step 01500/10000, lr 0.05, loss 0.5599 [ctc 0.5599], delta_l2 5127.5087890625, grad_norm 0.0002, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:52:51,272 CST - INFO - step 01600/10000, lr 0.05, loss 0.5425 [ctc 0.5425], delta_l2 5279.04345703125, grad_norm 0.0003, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:53:00,710 CST - INFO - step 01700/10000, lr 0.05, loss 0.5266 [ctc 0.5266], delta_l2 5424.431640625, grad_norm 0.0010, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:53:10,091 CST - INFO - step 01800/10000, lr 0.05, loss 0.5119 [ctc 0.5119], delta_l2 5564.81689453125, grad_norm 0.0012, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:53:19,458 CST - INFO - step 01900/10000, lr 0.05, loss 0.4980 [ctc 0.4980], delta_l2 5700.80517578125, grad_norm 0.0008, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:53:28,840 CST - INFO - step 02000/10000, lr 0.05, loss 0.4847 [ctc 0.4847], delta_l2 5833.14208984375, grad_norm 0.0006, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:53:38,215 CST - INFO - step 02100/10000, lr 0.05, loss 0.4721 [ctc 0.4721], delta_l2 5962.2861328125, grad_norm 0.0004, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:53:47,595 CST - INFO - step 02200/10000, lr 0.05, loss 0.4600 [ctc 0.4600], delta_l2 6088.1865234375, grad_norm 0.0005, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:53:56,958 CST - INFO - step 02300/10000, lr 0.05, loss 0.4484 [ctc 0.4484], delta_l2 6211.64697265625, grad_norm 0.0002, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:54:06,310 CST - INFO - step 02400/10000, lr 0.05, loss 0.4371 [ctc 0.4371], delta_l2 6333.0888671875, grad_norm 0.0009, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:54:15,681 CST - INFO - step 02500/10000, lr 0.05, loss 0.4260 [ctc 0.4260], delta_l2 6453.7001953125, grad_norm 0.0004, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:54:25,022 CST - INFO - step 02600/10000, lr 0.05, loss 0.4153 [ctc 0.4153], delta_l2 6573.41455078125, grad_norm 0.0007, text ['HELLONT MY NAME IS JACK']
+2025-09-21 11:54:34,381 CST - INFO - step 02700/10000, lr 0.05, loss 0.4048 [ctc 0.4048], delta_l2 6692.53173828125, grad_norm 0.0006, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:54:43,711 CST - INFO - step 02800/10000, lr 0.05, loss 0.3945 [ctc 0.3945], delta_l2 6811.88525390625, grad_norm 0.0004, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:54:53,028 CST - INFO - step 02900/10000, lr 0.05, loss 0.3843 [ctc 0.3843], delta_l2 6931.92138671875, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:55:02,353 CST - INFO - step 03000/10000, lr 0.05, loss 0.3742 [ctc 0.3742], delta_l2 7052.95703125, grad_norm 0.0006, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:55:11,673 CST - INFO - step 03100/10000, lr 0.05, loss 0.3643 [ctc 0.3643], delta_l2 7174.25830078125, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:55:20,994 CST - INFO - step 03200/10000, lr 0.05, loss 0.3546 [ctc 0.3546], delta_l2 7295.7724609375, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:55:30,323 CST - INFO - step 03300/10000, lr 0.05, loss 0.3452 [ctc 0.3452], delta_l2 7417.48486328125, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:55:39,645 CST - INFO - step 03400/10000, lr 0.05, loss 0.3361 [ctc 0.3361], delta_l2 7539.3701171875, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:55:48,952 CST - INFO - step 03500/10000, lr 0.05, loss 0.3271 [ctc 0.3271], delta_l2 7662.05322265625, grad_norm 0.0003, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:55:58,286 CST - INFO - step 03600/10000, lr 0.05, loss 0.3181 [ctc 0.3181], delta_l2 7785.6318359375, grad_norm 0.0003, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:56:07,574 CST - INFO - step 03700/10000, lr 0.05, loss 0.3091 [ctc 0.3091], delta_l2 7910.201171875, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:56:16,877 CST - INFO - step 03800/10000, lr 0.05, loss 0.3002 [ctc 0.3002], delta_l2 8036.33544921875, grad_norm 0.0004, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:56:26,193 CST - INFO - step 03900/10000, lr 0.05, loss 0.2913 [ctc 0.2913], delta_l2 8163.59375, grad_norm 0.0004, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:56:35,510 CST - INFO - step 04000/10000, lr 0.05, loss 0.2824 [ctc 0.2824], delta_l2 8292.1630859375, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:56:44,834 CST - INFO - step 04100/10000, lr 0.05, loss 0.2736 [ctc 0.2736], delta_l2 8421.6630859375, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:56:54,149 CST - INFO - step 04200/10000, lr 0.05, loss 0.2650 [ctc 0.2650], delta_l2 8551.830078125, grad_norm 0.0003, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:57:03,449 CST - INFO - step 04300/10000, lr 0.05, loss 0.2565 [ctc 0.2565], delta_l2 8681.974609375, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:57:12,759 CST - INFO - step 04400/10000, lr 0.05, loss 0.2483 [ctc 0.2483], delta_l2 8810.95703125, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:57:22,063 CST - INFO - step 04500/10000, lr 0.05, loss 0.2405 [ctc 0.2405], delta_l2 8938.04296875, grad_norm 0.0004, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:57:31,359 CST - INFO - step 04600/10000, lr 0.05, loss 0.2329 [ctc 0.2329], delta_l2 9062.583984375, grad_norm 0.0003, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:57:40,639 CST - INFO - step 04700/10000, lr 0.05, loss 0.2255 [ctc 0.2255], delta_l2 9185.822265625, grad_norm 0.0003, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:57:49,921 CST - INFO - step 04800/10000, lr 0.05, loss 0.2183 [ctc 0.2183], delta_l2 9308.4052734375, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:57:59,218 CST - INFO - step 04900/10000, lr 0.05, loss 0.2112 [ctc 0.2112], delta_l2 9430.3603515625, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:58:08,526 CST - INFO - step 05000/10000, lr 0.05, loss 0.2042 [ctc 0.2042], delta_l2 9552.1171875, grad_norm 0.0003, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:58:17,822 CST - INFO - step 05100/10000, lr 0.05, loss 0.1973 [ctc 0.1973], delta_l2 9673.5439453125, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:58:27,112 CST - INFO - step 05200/10000, lr 0.05, loss 0.1906 [ctc 0.1906], delta_l2 9794.537109375, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:58:36,409 CST - INFO - step 05300/10000, lr 0.05, loss 0.1839 [ctc 0.1839], delta_l2 9915.458984375, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:58:45,719 CST - INFO - step 05400/10000, lr 0.05, loss 0.1770 [ctc 0.1770], delta_l2 10036.998046875, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:58:55,014 CST - INFO - step 05500/10000, lr 0.05, loss 0.1704 [ctc 0.1704], delta_l2 10158.3232421875, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:59:04,322 CST - INFO - step 05600/10000, lr 0.05, loss 0.1641 [ctc 0.1641], delta_l2 10280.0048828125, grad_norm 0.0002, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:59:13,629 CST - INFO - step 05700/10000, lr 0.05, loss 0.1580 [ctc 0.1580], delta_l2 10401.35546875, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:59:22,921 CST - INFO - step 05800/10000, lr 0.05, loss 0.1520 [ctc 0.1520], delta_l2 10523.44921875, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:59:32,200 CST - INFO - step 05900/10000, lr 0.05, loss 0.1462 [ctc 0.1462], delta_l2 10645.2578125, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:59:41,544 CST - INFO - step 06000/10000, lr 0.05, loss 0.1406 [ctc 0.1406], delta_l2 10767.1005859375, grad_norm 0.0001, text ['HELLENT MY NAME IS JACK']
+2025-09-21 11:59:50,841 CST - INFO - step 06100/10000, lr 0.05, loss 0.1351 [ctc 0.1351], delta_l2 10889.505859375, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 12:00:00,152 CST - INFO - step 06200/10000, lr 0.05, loss 0.1297 [ctc 0.1297], delta_l2 11012.130859375, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 12:00:09,964 CST - INFO - step 06300/10000, lr 0.05, loss 0.1244 [ctc 0.1244], delta_l2 11134.7744140625, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 12:00:19,263 CST - INFO - step 06400/10000, lr 0.05, loss 0.1190 [ctc 0.1190], delta_l2 11258.3359375, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 12:00:28,560 CST - INFO - step 06500/10000, lr 0.05, loss 0.1137 [ctc 0.1137], delta_l2 11381.740234375, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 12:00:37,868 CST - INFO - step 06600/10000, lr 0.05, loss 0.1085 [ctc 0.1085], delta_l2 11505.3232421875, grad_norm 0.0000, text ['HELLENT MY NAME IS JACK']
+2025-09-21 12:00:47,184 CST - INFO - step 06700/10000, lr 0.05, loss 0.1035 [ctc 0.1035], delta_l2 11629.130859375, grad_norm 0.0000, text ['HELLBENT MY NAME IS JACK']
+2025-09-21 12:00:47,346 CST - INFO - Adversarial example saved to ./outputs/adv.wav and ./outputs/delta.wav
+2025-09-21 12:00:47,366 CST - INFO - Toxicity evaluation - Original: HELLOW MY NAME IS JACK, {'toxicity': 0.0062961583, 'severe_toxicity': 0.0001332316, 'obscene': 0.0011160573, 'threat': 0.00013246837, 'insult': 0.00031782617, 'identity_attack': 0.00013753092}
+2025-09-21 12:00:47,366 CST - INFO - Toxicity evaluation - Adversarial: HELLBENT MY NAME IS JACK, {'toxicity': 0.11676219, 'severe_toxicity': 0.00048165387, 'obscene': 0.029245654, 'threat': 0.00039773487, 'insult': 0.0026125745, 'identity_attack': 0.00034273881}
+2025-09-21 12:00:47,366 CST - INFO - ----- ----- Attack success ----- -----
+2025-09-21 12:00:47,367 CST - INFO - ----- ----- Attack start ----- -----
+2025-09-21 12:00:47,367 CST - INFO - Target text: HELLISH MY NAME IS JACK
+2025-09-21 12:00:47,502 CST - INFO - step 00000/10000, lr 0.05, loss 1.5323 [ctc 1.5323], delta_l2 0.0, grad_norm 0.0009, text ['HELLOW MY NAME IS JACK']
+2025-09-21 12:00:56,794 CST - INFO - step 00100/10000, lr 0.05, loss 1.2141 [ctc 1.2141], delta_l2 718.140380859375, grad_norm 0.0006, text ['HELLOW MY NAME IS JACK']
+2025-09-21 12:01:06,437 CST - INFO - step 00200/10000, lr 0.05, loss 0.9741 [ctc 0.9741], delta_l2 1318.0947265625, grad_norm 0.0005, text ['HELLO MY NAME IS JACK']
+2025-09-21 12:01:15,740 CST - INFO - step 00300/10000, lr 0.05, loss 0.7333 [ctc 0.7333], delta_l2 1880.2882080078125, grad_norm 0.0004, text ['HELLO MY NAME IS JACK']
+2025-09-21 12:01:25,054 CST - INFO - step 00400/10000, lr 0.05, loss 0.6111 [ctc 0.6111], delta_l2 2320.7177734375, grad_norm 0.0003, text ['HELLO MY NAME IS JACK']
+2025-09-21 12:01:34,409 CST - INFO - step 00500/10000, lr 0.05, loss 0.5214 [ctc 0.5214], delta_l2 2714.58837890625, grad_norm 0.0002, text ['HELLO MY NAME IS JACK']
+2025-09-21 12:01:43,809 CST - INFO - step 00600/10000, lr 0.05, loss 0.4454 [ctc 0.4454], delta_l2 3086.874755859375, grad_norm 0.0002, text ['HELLO MY NAME IS JACK']
+2025-09-21 12:01:53,234 CST - INFO - step 00700/10000, lr 0.05, loss 0.3608 [ctc 0.3608], delta_l2 3453.8369140625, grad_norm 0.0002, text ['HELLO MY NAME IS JACK']
+2025-09-21 12:02:02,654 CST - INFO - step 00800/10000, lr 0.05, loss 0.2715 [ctc 0.2715], delta_l2 3805.888671875, grad_norm 0.0002, text ['HELLOSH MY NAME IS JACK']
+2025-09-21 12:02:12,065 CST - INFO - step 00900/10000, lr 0.05, loss 0.2206 [ctc 0.2206], delta_l2 4107.89013671875, grad_norm 0.0001, text ['HELLOSH MY NAME IS JACK']
+2025-09-21 12:02:21,460 CST - INFO - step 01000/10000, lr 0.05, loss 0.1843 [ctc 0.1843], delta_l2 4378.173828125, grad_norm 0.0001, text ['HELLOSH MY NAME IS JACK']
+2025-09-21 12:02:30,848 CST - INFO - step 01100/10000, lr 0.05, loss 0.1554 [ctc 0.1554], delta_l2 4628.27587890625, grad_norm 0.0001, text ['HELLOSH MY NAME IS JACK']
+2025-09-21 12:02:40,235 CST - INFO - step 01200/10000, lr 0.05, loss 0.1323 [ctc 0.1323], delta_l2 4858.24462890625, grad_norm 0.0001, text ['HELLOSH MY NAME IS JACK']
+2025-09-21 12:02:49,598 CST - INFO - step 01300/10000, lr 0.05, loss 0.1140 [ctc 0.1140], delta_l2 5068.69873046875, grad_norm 0.0001, text ['HELLOSH MY NAME IS JACK']
+2025-09-21 12:02:58,988 CST - INFO - step 01400/10000, lr 0.05, loss 0.0992 [ctc 0.0992], delta_l2 5261.39111328125, grad_norm 0.0001, text ['HELLOSH MY NAME IS JACK']
+2025-09-21 12:03:08,386 CST - INFO - step 01500/10000, lr 0.05, loss 0.0872 [ctc 0.0872], delta_l2 5438.56494140625, grad_norm 0.0001, text ['HELLISH MY NAME IS JACK']
+2025-09-21 12:03:08,515 CST - INFO - Adversarial example saved to ./outputs/adv.wav and ./outputs/delta.wav
+2025-09-21 12:03:08,532 CST - INFO - Toxicity evaluation - Original: HELLOW MY NAME IS JACK, {'toxicity': 0.0062961583, 'severe_toxicity': 0.0001332316, 'obscene': 0.0011160573, 'threat': 0.00013246837, 'insult': 0.00031782617, 'identity_attack': 0.00013753092}
+2025-09-21 12:03:08,532 CST - INFO - Toxicity evaluation - Adversarial: HELLISH MY NAME IS JACK, {'toxicity': 0.105060495, 'severe_toxicity': 0.00043201292, 'obscene': 0.019773595, 'threat': 0.0003883396, 'insult': 0.0023765098, 'identity_attack': 0.000372938}
+2025-09-21 12:03:08,532 CST - INFO - ----- ----- Attack success ----- -----
+2025-09-21 12:03:08,532 CST - INFO - ----- ----- Attack start ----- -----
+2025-09-21 12:03:08,533 CST - INFO - Target text: HELLFIRE MY NAME IS JACK
+2025-09-21 12:03:08,669 CST - INFO - step 00000/10000, lr 0.05, loss 1.8624 [ctc 1.8624], delta_l2 0.0, grad_norm 0.0009, text ['HELLOW MY NAME IS JACK']
+2025-09-21 12:03:18,036 CST - INFO - step 00100/10000, lr 0.05, loss 1.5738 [ctc 1.5738], delta_l2 714.0501708984375, grad_norm 0.0005, text ['HELLOW MY NAME IS JACK']
+2025-09-21 12:03:27,406 CST - INFO - step 00200/10000, lr 0.05, loss 1.3152 [ctc 1.3152], delta_l2 1342.254638671875, grad_norm 0.0005, text ['HELLOWE MY NAME IS JACK']
+2025-09-21 12:03:36,790 CST - INFO - step 00300/10000, lr 0.05, loss 1.1545 [ctc 1.1545], delta_l2 1785.865478515625, grad_norm 0.0003, text ['HELLOE MY NAME IS JACK']
+2025-09-21 12:03:46,174 CST - INFO - step 00400/10000, lr 0.05, loss 0.9735 [ctc 0.9735], delta_l2 2245.17578125, grad_norm 0.0005, text ['HELLOE MY NAME IS JACK']
+2025-09-21 12:03:55,555 CST - INFO - step 00500/10000, lr 0.05, loss 0.8344 [ctc 0.8344], delta_l2 2638.83251953125, grad_norm 0.0003, text ['HELLOE MY NAME IS JACK']
+2025-09-21 12:04:04,926 CST - INFO - step 00600/10000, lr 0.05, loss 0.7313 [ctc 0.7313], delta_l2 3017.78076171875, grad_norm 0.0002, text ['HELLOE MY NAME IS JACK']
+2025-09-21 12:04:14,294 CST - INFO - step 00700/10000, lr 0.05, loss 0.6073 [ctc 0.6073], delta_l2 3392.34423828125, grad_norm 0.0003, text ['HOLLOE MY NAME IS JACK']
+2025-09-21 12:04:23,630 CST - INFO - step 00800/10000, lr 0.05, loss 0.5194 [ctc 0.5194], delta_l2 3713.41845703125, grad_norm 0.0002, text ['HELLORE MY NAME IS JACK']
+2025-09-21 12:04:32,978 CST - INFO - step 00900/10000, lr 0.05, loss 0.4580 [ctc 0.4580], delta_l2 4012.44580078125, grad_norm 0.0002, text ['HELLORE MY NAME IS JACK']
+2025-09-21 12:04:42,412 CST - INFO - step 01000/10000, lr 0.05, loss 0.4123 [ctc 0.4123], delta_l2 4277.318359375, grad_norm 0.0001, text ['HELLORE MY NAME IS JACK']
+2025-09-21 12:04:51,824 CST - INFO - step 01100/10000, lr 0.05, loss 0.3780 [ctc 0.3780], delta_l2 4514.49853515625, grad_norm 0.0001, text ['HELLORE MY NAME IS JACK']
+2025-09-21 12:05:01,205 CST - INFO - step 01200/10000, lr 0.05, loss 0.3509 [ctc 0.3509], delta_l2 4733.44580078125, grad_norm 0.0002, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:05:10,603 CST - INFO - step 01300/10000, lr 0.05, loss 0.3271 [ctc 0.3271], delta_l2 4946.5615234375, grad_norm 0.0002, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:05:19,984 CST - INFO - step 01400/10000, lr 0.05, loss 0.3063 [ctc 0.3063], delta_l2 5155.20947265625, grad_norm 0.0003, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:05:29,357 CST - INFO - step 01500/10000, lr 0.05, loss 0.2879 [ctc 0.2879], delta_l2 5359.36962890625, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:05:38,757 CST - INFO - step 01600/10000, lr 0.05, loss 0.2712 [ctc 0.2712], delta_l2 5558.44140625, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:05:48,167 CST - INFO - step 01700/10000, lr 0.05, loss 0.2560 [ctc 0.2560], delta_l2 5752.3505859375, grad_norm 0.0002, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:05:57,583 CST - INFO - step 01800/10000, lr 0.05, loss 0.2420 [ctc 0.2420], delta_l2 5941.955078125, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:06:06,963 CST - INFO - step 01900/10000, lr 0.05, loss 0.2288 [ctc 0.2288], delta_l2 6128.61181640625, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:06:16,381 CST - INFO - step 02000/10000, lr 0.05, loss 0.2163 [ctc 0.2163], delta_l2 6313.69091796875, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:06:25,759 CST - INFO - step 02100/10000, lr 0.05, loss 0.2046 [ctc 0.2046], delta_l2 6496.45361328125, grad_norm 0.0003, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:06:35,134 CST - INFO - step 02200/10000, lr 0.05, loss 0.1936 [ctc 0.1936], delta_l2 6676.6064453125, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:06:44,501 CST - INFO - step 02300/10000, lr 0.05, loss 0.1834 [ctc 0.1834], delta_l2 6853.3310546875, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:06:53,873 CST - INFO - step 02400/10000, lr 0.05, loss 0.1739 [ctc 0.1739], delta_l2 7026.79931640625, grad_norm 0.0002, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:07:03,241 CST - INFO - step 02500/10000, lr 0.05, loss 0.1650 [ctc 0.1650], delta_l2 7197.1494140625, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:07:12,605 CST - INFO - step 02600/10000, lr 0.05, loss 0.1565 [ctc 0.1565], delta_l2 7364.970703125, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:07:21,963 CST - INFO - step 02700/10000, lr 0.05, loss 0.1484 [ctc 0.1484], delta_l2 7530.22412109375, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:07:31,357 CST - INFO - step 02800/10000, lr 0.05, loss 0.1408 [ctc 0.1408], delta_l2 7692.9111328125, grad_norm 0.0002, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:07:40,696 CST - INFO - step 02900/10000, lr 0.05, loss 0.1336 [ctc 0.1336], delta_l2 7851.43603515625, grad_norm 0.0001, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:07:50,007 CST - INFO - step 03000/10000, lr 0.05, loss 0.1269 [ctc 0.1269], delta_l2 8005.138671875, grad_norm 0.0000, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:07:59,354 CST - INFO - step 03100/10000, lr 0.05, loss 0.1206 [ctc 0.1206], delta_l2 8154.2607421875, grad_norm 0.0003, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:08:08,731 CST - INFO - step 03200/10000, lr 0.05, loss 0.1147 [ctc 0.1147], delta_l2 8299.3681640625, grad_norm 0.0002, text ['HELLOIRE MY NAME IS JACK']
+2025-09-21 12:08:18,097 CST - INFO - step 03300/10000, lr 0.05, loss 0.1092 [ctc 0.1092], delta_l2 8439.994140625, grad_norm 0.0004, text ['HELLFIRE MY NAME IS JACK']
+2025-09-21 12:08:18,221 CST - INFO - Adversarial example saved to ./outputs/adv.wav and ./outputs/delta.wav
+2025-09-21 12:08:18,238 CST - INFO - Toxicity evaluation - Original: HELLOW MY NAME IS JACK, {'toxicity': 0.0062961583, 'severe_toxicity': 0.0001332316, 'obscene': 0.0011160573, 'threat': 0.00013246837, 'insult': 0.00031782617, 'identity_attack': 0.00013753092}
+2025-09-21 12:08:18,238 CST - INFO - Toxicity evaluation - Adversarial: HELLFIRE MY NAME IS JACK, {'toxicity': 0.071108826, 'severe_toxicity': 0.00035224797, 'obscene': 0.00944325, 'threat': 0.0006569755, 'insult': 0.0013991519, 'identity_attack': 0.00035387016}
+2025-09-21 12:08:18,238 CST - INFO - ----- ----- Attack success ----- -----

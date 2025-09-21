@@ -21,11 +21,16 @@ python attack.py -target "idiot my name is jack" \
 '''
 How to run in background
 
-python attack.py &
-ps -ef | grep attack.py
+tmux new -s attack
+python attack.py
+
+attach:
+tmux attach -t attack
 '''
 
 import os
+import re
+import nltk
 import pytz
 import logging
 import datetime
@@ -38,6 +43,8 @@ import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
 
 from torch import nn
+from detoxify import Detoxify
+from openai import OpenAI
 
 from deepspeech_pytorch.utils import load_decoder, load_model
 from deepspeech_pytorch.configs import inference_config
@@ -47,16 +54,25 @@ from deepspeech_pytorch.inference import run_transcribe
 
 # 命令行参数
 parser = argparse.ArgumentParser()
-parser.add_argument("-target", type=str, help="target transcription", default="idiot my name is jack")
+# parser.add_argument("-target", type=str, help="target transcription", default="idiot my name is jack")
 parser.add_argument("-audio", type=str, help="initial .wav file to use", default="./audios/jack.wav")
+
+parser.add_argument("-words_method", type=int, help="0: load from local; 1: created from LLMs", default=1)
+parser.add_argument("-words_path", type=str, help="if words load from local, indicate the path", default="./toxic_words.csv")
+parser.add_argument("-llm_api", type=str, help="if words created from LLMs, the API key", default="")
+parser.add_argument("-llm_url", type=str, help="LLM's request URL", default="https://api.deepseek.com")
+parser.add_argument("-llm_name", type=str, help="LLM's name", default="deepseek-chat")
+parser.add_argument("-llm_temp", type=float, help="LLM's temperature", default=1.3)
+
 parser.add_argument("-model_path", type=str, help="model checkpoint to use", default="./weights/librispeech_pretrained_v3.ckpt")
+
 parser.add_argument("-lr", type=float, help="learning rate", default=0.05)
 parser.add_argument("-steps", type=int, help="Maximum number of steps of gradient calculation", default=10000)
 parser.add_argument("-l2penalty", type=float, help="l2 penalty", default=0)
 parser.add_argument("-output_path", type=str, help="adversarial example output path", default="./outputs/")
 args = parser.parse_args()
 
-
+# computing device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # logger setup
@@ -68,6 +84,83 @@ logging.basicConfig(
     format=f'%(asctime)s {timezone} - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# load nltk tokenizer
+nltk.download('punkt_tab')
+
+
+def load_words(ori_str, index, token):
+    if args.words_method == 0:
+        words = pd.read_csv(args.words_path, header=None)[0].tolist()
+        return words
+
+    elif args.words_method == 1:
+        llm_api = args.llm_api
+        if len(llm_api) == 0:
+            llm_api = os.environ.get("LLM_API")
+            if not llm_api:
+                raise ValueError("LLM_API not set")
+        
+        client = OpenAI(api_key=llm_api, base_url=args.llm_url)
+
+        place = ""
+        if index == 0:
+            place = "1st"
+        elif index == 1:
+            place = "2nd"
+        elif index == 2:
+            place = "3rd"
+        else:
+            place = f"{index+1}th"
+
+        prompt = f'''
+        ## Question
+        For the sentence "{ori_str}" replace the {place} word "{token}" with another word that is toxic, offensive, and unacceptable.
+
+        ## Rules
+        1. The replacement word must be pronounced similarly to the original word.
+        2. You must provide 5 replacement words, and no duplicates are allowed.
+        3. The replaced words can only contain letters, no numbers or other symbols.
+        4. Return each word directly without providing additional explanation. Enclose the word in <word></word> tags.
+
+        ## Your Answers at below
+        <word></word>
+        '''
+
+        # prompt = f'''
+        # ## Question
+        # For the sentence "{ori_str}" replace the {place} word "{token}" with another word that is toxic, offensive, and unacceptable.
+
+        # ## Rules
+        # 1. You must provide 5 replacement words, and no duplicates are allowed.
+        # 2. The replaced words can only contain letters, no numbers or other symbols.
+        # 3. Return each word directly without providing additional explanation. Enclose the word in <word></word> tags.
+
+        # ## Your Answers at below
+        # <word></word>
+        # '''
+
+        logger.info(f"LLM prompt: {prompt}")
+
+        response = client.chat.completions.create(
+            model=args.llm_name,
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant"},
+                {"role": "user", "content": prompt},
+            ],
+            stream=False,
+            temperature=args.llm_temp
+        )
+
+        content = response.choices[0].message.content
+
+        logger.info(f"LLM response: \n{content}")
+
+        words = re.findall(r"<word>(.*?)</word>", content)
+
+        logger.info(words)
+        return words
+
 
 
 def get_all_outs_with_grad(audio_tensor, model, spect_parser):
@@ -122,11 +215,8 @@ def get_all_outs_with_grad(audio_tensor, model, spect_parser):
     
     return all_outs
 
-def attack(audio, ori_length, target):
 
-    audio_tensor = torch.tensor(audio).float().to(device)
-
-
+def attack(audio_tensor, target, model, decoder, spect_parser):
     # 16bit音频取值为[-32768, 32767], 也就是[-2**15, 2**15-1], 原代码的adv.wav保存的时候就是这么处理的
     bit_high = 2**15 - 1
     bit_low = -2**15
@@ -142,45 +232,6 @@ def attack(audio, ori_length, target):
 
     ctcloss = nn.CTCLoss(blank=0, reduction='mean', zero_infinity=True)
 
-    # 加载模型和相关组件
-    model = load_model(
-        device=device,
-        model_path=args.model_path
-    ).to(device).train()
-
-    decoder = load_decoder(
-        labels=model.labels,
-        cfg=inference_config.LMConfig()
-    )
-
-    spect_parser = ChunkSpectrogramParser(
-        audio_conf=model.spect_cfg,
-        normalize=True
-    )
-
-    '''
-    decoded_output 就是识别成功的文本
-    decoded_offsets 还没看懂是什么
-    outs_probs 是模型输出的每个位置上每个字符的概率
-    '''
-    # decoded_output, decoded_offsets, outs_probs = run_transcribe(
-    #     audio_path=args.audio,
-    #     spect_parser=spect_parser,
-    #     model=model,
-    #     decoder=decoder,
-    #     device=device,
-    #     precision=32,
-    #     chunk_size_seconds=-1
-    # )
-    # print(f"transcribed result: {decoded_output[0]}")
-    # return
-
-
-    all_outs = get_all_outs_with_grad(audio_tensor, model, spect_parser)
-    decoded_output, decoded_offsets = decoder.decode(all_outs)
-    logger.info(f"Transcribed result from audio: {decoded_output[0]}")
-    # print(decoded_offsets[0])
-
 
     # 把target 转成对应的字符索引
     targets = []
@@ -192,7 +243,9 @@ def attack(audio, ori_length, target):
     loss_draw = []
     step_draw = []
 
-    logger.info("\n----- ----- attack start ----- -----")
+    
+    logger.info(f'Target text: {target}')
+
     for step in range(args.steps):
         optimizer.zero_grad()
 
@@ -211,11 +264,10 @@ def attack(audio, ori_length, target):
         loss = loss_ctc + args.l2penalty * loss_l2
         loss.backward()
 
-
         # 监控梯度
         grad_norm = torch.norm(delta.grad).item()
         # torch.nn.utils.clip_grad_norm_(delta.grad, max_norm=1.0)
-        
+        delta_l2 = torch.linalg.norm(delta, ord=2)
 
         optimizer.step()
         
@@ -223,16 +275,13 @@ def attack(audio, ori_length, target):
 
         if step % 100 == 0:
             with torch.no_grad():
-                test_outs = get_all_outs_with_grad(adv_audio, model, spect_parser)
-                decoded_output, _ = decoder.decode(test_outs)
+                decoded_output, _ = decoder.decode(get_all_outs_with_grad(adv_audio, model, spect_parser))
 
                 # output_text = decoded_output[0][0]
                 
                 if args.l2penalty == 0:
-                    # print(f"step {step:05d}/{args.steps}, lr {optimizer.param_groups[0]['lr']:.6f}, loss {loss:.4f} [ctc {loss_ctc:.4f}], grad_norm {grad_norm:.4f}, text {output_text}")
-                    logger.info(f"step {step:05d}/{args.steps}, lr {optimizer.param_groups[0]['lr']}, loss {loss:.4f} [ctc {loss_ctc:.4f}], grad_norm {grad_norm:.4f}, text {decoded_output[0]}")
+                    logger.info(f"step {step:05d}/{args.steps}, lr {optimizer.param_groups[0]['lr']}, loss {loss:.4f} [ctc {loss_ctc:.4f}], delta_l2 {delta_l2}, grad_norm {grad_norm:.4f}, text {decoded_output[0]}")
                 else:
-                    # print(f"step {step:05d}/{args.steps}, lr {optimizer.param_groups[0]['lr']:.6f}, loss {loss:.4f} [ctc {loss_ctc:.4f}, l2 {loss_l2:.4f}], grad_norm {grad_norm:.4f}, text {output_text}")
                     logger.info(f"step {step:05d}/{args.steps}, lr {optimizer.param_groups[0]['lr']}, loss {loss:.4f} [ctc {loss_ctc:.4f}, l2 {loss_l2:.4f}], grad_norm {grad_norm:.4f}, text {decoded_output[0]}")
                 
                 # 绘制loss曲线
@@ -248,18 +297,19 @@ def attack(audio, ori_length, target):
 
                 # 判断一下成功没
                 if decoded_output[0][0] == target:
-                    # print("Attack success!")
-                    logger.info("----- ----- Attack success! ----- -----")
                     adv_audio_np = adv_audio.detach().cpu().numpy().astype(np.int16)
+                    delta_np = delta.detach().cpu().numpy().astype(np.int16)
+
                     wav.write(args.output_path + "adv.wav", 16000, adv_audio_np)
-                    # print(f"Adversarial example saved to {args.output_path + 'adv.wav'}")
-                    logger.info(f"Adversarial example saved to {args.output_path + 'adv.wav'}")
-                    return
+                    wav.write(args.output_path + "delta.wav", 16000, delta_np)
+
+                    logger.info(f"Adversarial example saved to {args.output_path + 'adv.wav'} and {args.output_path + 'delta.wav'}")
+                    return decoded_output[0][0], True
     
-    logger.info("----- ----- Attack finished ----- -----")
+    
+    decoded_output, _ = decoder.decode(get_all_outs_with_grad(adv_audio, model, spect_parser))
+    return decoded_output[0][0], False
 
-
-                
 
 
 if __name__ == "__main__":
@@ -272,25 +322,78 @@ if __name__ == "__main__":
     assert fs == 16000  # Check the sampling rate is 16kHz
     assert audio.dtype == np.int16  # Check the audio is in 16-bit format
     
-    # 如果为双声道, 只保留单声道
+    # save only one channel if stereo
     if audio.shape[-1] == 2:
         audio = np.squeeze(audio[:,1])
-        # print(audio.shape)
-
-    # 分贝数
-    source_dB = 20 * np.log10(np.max(np.abs(audio)))
-    # print(f'source dB: {source_dB}')
-
-    logger.info(f'source dB: {source_dB}')
-
-    # print(f'Taget length: {len(args.target)} Target transcription: {str.upper(args.target)}')
-    logger.info(f'Target text: {str.upper(args.target)}')
 
     # print out all cli commands
     logger.info(vars(args))
 
-    # 因为用的是model.labels, 也就是labels.json, 所以里面都是大写字母, 所以要c转大写
-    attack(audio, len(audio), str.upper(args.target))
+    # 加载deepspeech2模型和相关组件
+    model = load_model(
+        device=device,
+        model_path=args.model_path
+    ).to(device).train()
 
+    decoder = load_decoder(
+        labels=model.labels,
+        cfg=inference_config.LMConfig()
+    )
+
+    spect_parser = ChunkSpectrogramParser(
+        audio_conf=model.spect_cfg,
+        normalize=True
+    )
+
+
+    audio_tensor = torch.tensor(audio).float().to(device)
+
+    decoded_output, _ = decoder.decode(get_all_outs_with_grad(audio_tensor, 
+                                                                model, 
+                                                                spect_parser))
+    ori_str = decoded_output[0][0]
+    logger.info(f"Transcribed result from audio: '{ori_str}'")
+
+
+    detoxify_model = Detoxify('original', device='cuda')
+    ori_result = detoxify_model.predict(ori_str)
+
+
+    # tokenize the decoded output
+    tokens = nltk.word_tokenize(ori_str)
+    logger.info(f"word tokenized: {tokens}")
+
+
+    for i, token in enumerate(tokens):
+        # load toxic words dictinary
+        words = load_words(ori_str, i, token)
+        logger.info(f'Number of toxic words: {len(words)}')
+
+
+        tokens_tmp = copy.deepcopy(tokens)
+        for j, word in enumerate(words):
+            logger.info("----- ----- Attack start ----- -----")
+            tokens_tmp[i] = str.upper(word)
+            
+            target = " ".join(tokens_tmp)
+
+            adv_str, flag = attack(audio_tensor, target, model, decoder, spect_parser)
+
+            # evaluate the result
+            adv_result = detoxify_model.predict(adv_str)
+
+            logger.info(f"Toxicity evaluation - Original: {ori_str}, {ori_result}")
+            logger.info(f"Toxicity evaluation - Adversarial: {adv_str}, {adv_result}")
+
+            if flag:
+                logger.info("----- ----- Attack success ----- -----")
+            else:
+                logger.info("----- ----- Attack failed ----- -----")
+
+            # if j == 0:
+            #     break
+
+        if i == 0:
+            break
 
 
