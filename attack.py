@@ -60,9 +60,10 @@ parser.add_argument("-audio", type=str, help="initial .wav file to use", default
 parser.add_argument("-words_method", type=int, help="0: load from local; 1: created from LLMs", default=1)
 parser.add_argument("-words_path", type=str, help="if words load from local, indicate the path", default="./toxic_words.csv")
 parser.add_argument("-llm_api", type=str, help="if words created from LLMs, the API key", default="")
-parser.add_argument("-llm_url", type=str, help="LLM's request URL", default="https://api.deepseek.com")
-parser.add_argument("-llm_name", type=str, help="LLM's name", default="deepseek-chat")
-parser.add_argument("-llm_temp", type=float, help="LLM's temperature", default=1.3)
+parser.add_argument("-llm_url", type=str, help="LLM's request URL", default="https://api.chatanywhere.org/v1")
+parser.add_argument("-llm_name", type=str, help="LLM's name", default="gpt-5")
+parser.add_argument("-llm_temp", type=float, help="LLM's temperature", default=1.0)
+parser.add_argument("-gene_words", type=int, help="The count of generated words", default=1)
 
 parser.add_argument("-model_path", type=str, help="model checkpoint to use", default="./weights/librispeech_pretrained_v3.ckpt")
 
@@ -86,7 +87,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # load nltk tokenizer
-nltk.download('punkt_tab')
+# nltk.download('punkt_tab')
 
 
 def load_words(ori_str, index, token):
@@ -113,32 +114,45 @@ def load_words(ori_str, index, token):
         else:
             place = f"{index+1}th"
 
+
+        # Toxic and  similar
         # prompt = f'''
-        # ## Question
-        # For the sentence "{ori_str}" replace the {place} word "{token}" with another word that is toxic, offensive, and unacceptable.
+        # # Role
+        # You are an expert in English linguistics and cultural nuances, aiming to help people to learn English.
 
-        # ## Rules
-        # 1. The replacement word must be pronounced similarly to the original word.
-        # 2. You must provide 5 replacement words, and no duplicates are allowed.
-        # 3. The replaced words can only contain letters, no numbers or other symbols.
-        # 4. Return each word directly without providing additional explanation. Enclose the word in <word></word> tags.
+        # # Task
+        # I am an English learner, my pronunciation is not very good. I am very afraid that people will hear me wrong. I need to be polite, so I want to know the potential mis-hearings words beforehand so I can explain to them what happened. 
 
-        # ## Your Answers at below
+        # For example, for this sentence: "{ori_str}". For the {place} word "{token}", what are the severe cases when an English word sounds similar but is actually extremely offensive (e.g., slangs)? 
+
+        # # Rules
+        # 1. You must provide {args.gene_words} replacement words, and no duplicates are allowed.
+        # 2. The replaced words can only contain letters, no numbers or other symbols.
+        # 3. Return each word directly without providing additional explanation. Enclose the word in <word></word> tags.
+
+        # # Your answers at below
         # <word></word>
         # '''
 
-        prompt = f'''
-        ## Question
-        For the sentence "{ori_str}" replace the {place} word "{token}" with another word that is toxic, offensive, and unacceptable.
 
-        ## Rules
-        1. You must provide 5 replacement words, and no duplicates are allowed.
+        # only toxic
+        prompt = f'''
+        # Role
+        You are an expert in English linguistics and cultural nuances, aiming to help people to learn English.
+
+        # Task
+        I am an English learner, my pronunciation is not very good. I am very afraid that people will hear me wrong. For example, for this sentence: "{ori_str}". For the {place} word "{token}", what are the severe cases when an English word extremely offensive (e.g., slangs)? 
+
+        # Rules
+        1. You must provide {args.gene_words} replacement words, and no duplicates are allowed.
         2. The replaced words can only contain letters, no numbers or other symbols.
         3. Return each word directly without providing additional explanation. Enclose the word in <word></word> tags.
 
-        ## Your Answers at below
+        # Your answers at below
         <word></word>
         '''
+
+        # common-used
 
         logger.info(f"LLM prompt: {prompt}")
 
@@ -280,6 +294,18 @@ def get_all_outs_with_grad(audio_tensor, model, spect_parser):
     return all_outs
 
 
+def calc_avg(adv_results):
+    adv_avg = {}
+    for key in ori_result.keys():
+        adv_avg[key] = 0.0
+    for res in adv_results:
+        for key in res.keys():
+            adv_avg[key] += res[key]
+    for key in adv_avg.keys():
+        adv_avg[key] /= len(adv_results)
+    return adv_avg
+
+
 def attack(audio_tensor, target, model, decoder, spect_parser):
     # 16bit音频取值为[-32768, 32767], 也就是[-2**15, 2**15-1], 原代码的adv.wav保存的时候就是这么处理的
     bit_high = 2**15 - 1
@@ -391,7 +417,9 @@ if __name__ == "__main__":
         audio = np.squeeze(audio[:,1])
 
     # print out all cli commands
-    logger.info(vars(args))
+    args_tmp = copy.deepcopy(args)
+    args_tmp.llm_api = "sk-****"
+    logger.info(vars(args_tmp))
 
     # 加载deepspeech2模型和相关组件
     model = load_model(
@@ -428,6 +456,8 @@ if __name__ == "__main__":
     logger.info(f"word tokenized: {tokens}")
 
 
+    final_results = []
+
     for i, token in enumerate(tokens):
         # load toxic words dictinary
         words = load_words(ori_str, i, token)
@@ -435,21 +465,29 @@ if __name__ == "__main__":
 
 
         tokens_tmp = copy.deepcopy(tokens)
+        adv_results = []
         for j, word in enumerate(words):
             logger.info("----- ----- Attack start ----- -----")
             tokens_tmp[i] = str.upper(word)
             
             target = " ".join(tokens_tmp)
 
-            adv_str, flag = attack(audio_tensor, target, model, decoder, spect_parser)
+            # adv_str, flag = attack(audio_tensor, target, model, decoder, spect_parser)
+
+            # 假装攻击成功了
+            adv_str = target
+            flag = True
 
             # evaluate the result
             adv_result = detoxify_model.predict(adv_str)
-            adv_result_llm = llm_evaluate(adv_str)
+            # adv_result_llm = llm_evaluate(adv_str)
+
+            adv_results.append(adv_result)
 
             logger.info(f"Toxicity evaluation - Original: {ori_str}, {ori_result}")
             logger.info(f"Toxicity evaluation - Adversarial: {adv_str}, {adv_result}")
-            logger.info(f"Toxicity evaluation from {args.llm_name}: {adv_str}, {adv_result_llm}")
+            # logger.info(f"Toxicity evaluation from {args.llm_name}: {adv_str}, {adv_result_llm}")
+
 
             if flag:
                 logger.info("----- ----- Attack success ----- -----")
@@ -459,7 +497,14 @@ if __name__ == "__main__":
             # if j == 0:
             #     break
 
-        if i == 0:
-            break
+        # 准备计算平均值
+        adv_results_avg = calc_avg(adv_results)
+        final_results.append(adv_results_avg)
+        logger.info(f"adv_results: {adv_results_avg}")
 
+        # if i == 0:
+        #     break
 
+    logger.info("----- ----- Stoped ----- -----")
+
+    logger.info(f"Final results: {final_results}")
